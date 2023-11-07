@@ -65,6 +65,75 @@ async function drawSelectCard(idCard){
     state.cardSprites.type.innerText = `Attribute: ${cardData[idCard].type}`;
 }
 
+async function removeAllCardImages(){
+    let cards = document.getElementById("computer-cards");
+    let imagesElements = cards.querySelectorAll("img");
+    imagesElements.forEach((img)=> img.remove());
+
+    cards = document.getElementById("player-cards");
+    imagesElements = cards.querySelectorAll("img");
+    imagesElements.forEach((img)=> img.remove());
+}
+
+async function checkDuelResults(playerCardId, computerCardId){
+    let duelResults = "Empate";
+    let playerCard = cardData[playerCardId];
+
+    if(playerCard.winOf.includes(computerCardId)){
+        duelResults = "Ganhou!";
+        state.score.playerScore++;
+        await playAudio("win");
+    }
+
+    if(playerCard.loseOf.includes(computerCardId)){
+        duelResults = "Perdeu!";
+        state.score.computerScore++;
+        await playAudio("lose");
+    }
+
+    return duelResults;
+}
+
+async function drawButton(duelResults){
+    state.actions.button.innerText = duelResults;
+    state.actions.button.style.display = "block";
+}
+
+async function updateScore(){
+    state.score.scoreBox.innerText = `Win : ${state.score.playerScore} | Lose : ${state.score.computerScore}`;
+}
+
+async function resetDuel(){
+    state.cardSprites.avatar.src = "";
+    state.actions.button.style.display = "none";
+
+    state.fieldCards.player.style.display = "none";
+    state.fieldCards.computer.style.display = "none";
+    init();
+}
+
+async function playAudio(status){
+const audio = new Audio(`./src/assets/audios/${status}.wav`);
+audio.play();
+}
+
+async function setCardField(idCard){
+    await removeAllCardImages();
+
+    let computerCardId = await getRandomCardId();
+
+    state.fieldCards.player.style.display = "block";
+    state.fieldCards.computer.style.display = "block";
+
+    state.fieldCards.player.src = cardData[idCard].img;
+    state.fieldCards.computer.src = cardData[computerCardId].img;
+
+    let duelResults = await checkDuelResults(idCard, computerCardId);
+
+    await updateScore();
+    await drawButton(duelResults);
+}
+
 async function createCardImage(idCard, fieldSide) {
     const cardImage = document.createElement("img");
     cardImage.setAttribute("height", "100px");
