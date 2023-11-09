@@ -1,3 +1,4 @@
+
 .bg-video {
     position: absolute;
     z-index: -2;
@@ -8,7 +9,7 @@
     justify-content: center;
 }
 
-.bg-video>.video {
+.bg-video > .video {
     height: 100vh;
 }
 
@@ -112,6 +113,8 @@
 .card-infield {
     height: 11.2rem;
     width: 8rem;
+    border: #ffffff solid 1px;
+    border-radius: 6px;
 }
 
 .card{
