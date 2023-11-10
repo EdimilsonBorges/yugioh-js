@@ -172,6 +172,7 @@ async function drawCards(cardNumber, fieldSide) {
 }
 
 function init() {
+
     state.fieldCards.player.style.display = "none";
     state.fieldCards.computer.style.display = "none";
     state.fieldCards.field.forEach((el) => {
@@ -179,6 +180,9 @@ function init() {
     });
     drawCards(5, playerSide.player1);
     drawCards(5, playerSide.computer);
+
+    const bgm = document.getElementById("bgm");
+    bgm.play(); 
 }
 
 init();
